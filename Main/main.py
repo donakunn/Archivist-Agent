@@ -1,8 +1,10 @@
+from Classifiers.naive_bayes import nb_init
+
 
 def start_menu():
-    choice = int(input("Premi 1 per Classificatore Bayesiano, 2 per Classificatore k-Means: "))
+    choice = 1  # int(input("Premi 1 per Classificatore Bayesiano, 2 per Classificatore k-Means: "))
     if choice == 1:
-        print("1")
+        nb_init()
     else:
         print("2")
 
