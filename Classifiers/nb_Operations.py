@@ -56,7 +56,7 @@ def pulizia_vocabolario(vocabolario):
         del vocabolario[p]
 
 
-def training(corpus, vocabolario, n_training, prob_classi, prob_parole, training_set):
+def training(corpus, vocabolario, prob_classi, prob_parole, training_set):
     """Costruisce le matrici con le probabilita' a priori P(c) e a posteriori
         P(p|c) di ciascuna classe c del corpus dei documenti e di ciascuna parola nella
         lista delle classi e nel vocabolario. Usa i primi n_training file
@@ -65,8 +65,8 @@ def training(corpus, vocabolario, n_training, prob_classi, prob_parole, training
         pone per ciascuna chiave (classe) la lista dei documenti che ha usato per
         addestrare il classificatore."""
     lunghezza_vocabolario = len(vocabolario)
-    n_classi = len(corpus)
-    n_doc = n_classi * n_training   # numero di doc di training set totali
+    n_documenti_totali = 0
+
     for c in corpus:
         print("Classe", c, end=" ")
         # produce la lista di tutte le parole (con ripetizione) di tutti i
@@ -74,12 +74,10 @@ def training(corpus, vocabolario, n_training, prob_classi, prob_parole, training
         # i documenti
         lista_parole = []
         training_set[c] = []
+        n_documenti_totali += len(corpus[c]) # numero di doc di training set totali
         for testo in corpus[c]:
             training_set[c].append(testo)
             lista_parole.extend(corpus[c][testo])
-            # Training set = primi n_training documenti.
-            if len(training_set[c]) >= n_training:
-                break
 
         # calcolo probabilità condizionata P(p|c) usando la correzione di laplace per evitare che il
         # prodotto venga annullato da parole non presenti nella classe
@@ -89,7 +87,7 @@ def training(corpus, vocabolario, n_training, prob_classi, prob_parole, training
             prob_parole[p, c] = ((lista_parole.count(p) + 1) / denominatore) * lunghezza_vocabolario
 
         # Calcolo delle probabilità P(c) relative alle classi
-        prob_classi[c] = len(training_set[c]) / n_doc
+        prob_classi[c] = len(training_set[c]) / n_documenti_totali
 
 
 def testing(corpus, vocabolario, prob_classi, prob_parole, training_set):
