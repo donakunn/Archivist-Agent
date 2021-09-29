@@ -5,16 +5,6 @@ import re
 PATHSEP = os.path.sep
 
 
-def analizza_testo(doc):
-    """Tokenizza il testo contenuto in un documento e restituisce una lista che contiene i token estratti
-        meno eventuali stopwords."""
-    lista_parole = []
-    for parola in re.findall(r"[a-zA-Z]+", doc):
-        if parola not in STOPWORDS:
-            lista_parole.append(parola)
-    return lista_parole
-
-
 def analizza_corpus(dir_path, vocabolario):         # nome non mi convince
     """Data una dir_path che contenga solo cartelle,
         ciascuna delle quali rappresenta una classe ed ognuna contiene documenti
@@ -90,6 +80,22 @@ def training(corpus, vocabolario, prob_classi, prob_parole, training_set):
         prob_classi[c] = len(training_set[c]) / n_documenti_totali
 
 
+def classifica(corpus, categoria, doc, prob_classi, prob_parole, vocabolario):
+    parole = corpus[categoria][doc]
+    # Cerca la classe che massimizza P(classe)P(token|classe)
+    p_max = -1
+    class_max = ""
+    for cc in prob_classi:
+        p = prob_classi[cc]
+        for t in parole:
+            if t in vocabolario:
+                p *= prob_parole[t, cc]
+        if p > p_max:
+            p_max = p
+            class_max = cc
+    return class_max
+
+
 def testing(corpus, vocabolario, prob_classi, prob_parole, training_set):
     """Classifica gli esempi di test del corpus
         sulla base delle probabilita' fornite. Il dizionario
@@ -103,22 +109,9 @@ def testing(corpus, vocabolario, prob_classi, prob_parole, training_set):
         e = risposte_esatte
         s = risposte_sbagliate
         for testo in corpus[c]:
-            if testo in training_set[c]:
-                continue
             # Ora prova a classificare il documento
             # print("Documento", nome, end="")
-            parole = corpus[c][testo]
-            # Cerca la classe che massimizza P(classe)P(token|classe)
-            p_max = -1
-            class_max = ""
-            for cc in prob_classi:
-                p = prob_classi[cc]
-                for t in parole:
-                    if t in vocabolario:
-                        p *= prob_parole[t, cc]
-                if p > p_max:
-                    p_max = p
-                    class_max = cc
+            class_max = classifica(corpus, c, prob_classi, prob_parole, vocabolario)
             # La classe scelta è class_max
             # print(class_max, "[", p_max*100, "%]?", c)
             if class_max == c:
