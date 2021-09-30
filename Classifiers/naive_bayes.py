@@ -1,6 +1,8 @@
 import os
 import re
+import numpy as np
 from Classifiers.stopwords import STOPWORDS
+
 PATHSEP = os.path.sep
 # NOME_VOC = "vocabolario.txt"
 
@@ -9,25 +11,36 @@ class NaiveBayesClassifier:
 
     def __init__(self):
         self.vocabolario = {}
-        self.training_set = {}  # training_set[classe] = [documenti in quella classe]
+        # self.training_set = {}  # training_set[classe] = [documenti in quella classe]
         self.prob_classi = {}  # {classe: P(classe) }
         self.prob_parole = {}  # {parola,classe: P(parola|classe), ...}
 
+    def save_classifier_attributes(self):
+        np.save('vocabolario.npy', self.vocabolario)
+        np.save('prob_classi.npy', self.prob_classi)
+        np.save('prob_parole.npy', self.prob_parole)
+
+    def load_classifier_attributes(self):
+        self.vocabolario = np.load('vocabolario.npy', allow_pickle= True).item()
+        self.prob_classi = np.load('prob_classi.npy', allow_pickle=True).item()
+        self.prob_parole = np.load('prob_parole.npy', allow_pickle=True).item()
+
     def nb_init(self):
 
-        train_corpus = self.costruisci_corpus("20news-bydate-train")
-        print(f"Corpus con {len(train_corpus)} classi e {len(self.vocabolario)} parole")
+        if not os.path.exists('./vocabolario.npy'):
+            train_corpus = self.costruisci_corpus("20news-bydate-train", True)
+            print(f"Corpus con {len(train_corpus)} classi e {len(self.vocabolario)} parole diverse")
 
         # Salva il vocabolario
         # with open(NOME_VOC, "w") as file:
         #    for p in vocabolario:
         #        file.write(p + "\n")
 
-        self.popola_vocabolario(train_corpus)
-        self.pulizia_vocabolario()
-        self.training(train_corpus)
+            self.training(train_corpus)
+        else:
+            self.load_classifier_attributes()
 
-        test_corpus = self.costruisci_corpus("20news-bydate-test")
+        test_corpus = self.costruisci_corpus("20news-bydate-test", False)
         print("\nFase di test: classifica i documenti che non sono nel training set.")
         risultato = self.testing(test_corpus)
 
@@ -43,7 +56,7 @@ class NaiveBayesClassifier:
                 lista_parole.append(parola)
         return lista_parole
 
-    def costruisci_corpus(self, dir_path):  # nome non mi convince
+    def costruisci_corpus(self, dir_path, is_training_set):  # nome non mi convince
         """Data una dir_path che contenga solo cartelle,
             ciascuna delle quali rappresenta una classe ed ognuna contiene documenti
             relativi alla classe descritta da tale cartella.
@@ -64,22 +77,16 @@ class NaiveBayesClassifier:
                         with open(dir_path + PATHSEP + d + PATHSEP + f, "r", encoding="latin-1") as file:
                             lista_parole = self.analizza_testo(file.read().lower())
                             corpus[d][f] = lista_parole
-                            # for t in lista_parole:
-                            #    if t in self.vocabolario:
-                            #        self.vocabolario[t] += 1
-                            #    else:
-                            #        self.vocabolario[t] = 1
-        # self.pulizia_vocabolario()
-        return corpus
+                            if is_training_set:
+                                for t in lista_parole:
+                                    if t in self.vocabolario:
+                                        self.vocabolario[t] += 1
+                                    else:
+                                        self.vocabolario[t] = 1
 
-    def popola_vocabolario(self, corpus):
-        for categoria in corpus:
-            for doc in corpus[categoria]:
-                for t in doc:
-                    if t in self.vocabolario:
-                        self.vocabolario[t] += 1
-                    else:
-                        self.vocabolario[t] = 1
+                if is_training_set:
+                    self.pulizia_vocabolario()
+        return corpus
 
     def pulizia_vocabolario(self):
         """Questa funzione effettua la rimozione di parole che compaiono al massimo 3 volte in tutto il corpus
@@ -121,6 +128,7 @@ class NaiveBayesClassifier:
 
             # Calcolo delle probabilità P(c) relative alle classi
             self.prob_classi[c] = len(corpus[c].keys()) / n_documenti_totali
+        self.save_classifier_attributes()
 
     def classifica(self, testo_doc):
         # Cerca la classe che massimizza P(classe)P(token|classe)
