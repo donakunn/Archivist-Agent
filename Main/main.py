@@ -3,7 +3,7 @@ import Classifiers.naive_bayes
 
 def start_menu():
     bayes_classifiers = Classifiers.naive_bayes.NaiveBayesClassifier()
-    bayes_classifiers.load_classifier_attributes()
+    # bayes_classifiers.load_classifier_attributes()
     choice = int(input("Premi 1 per Addestrare e testare il classificatore, 2 per classificare un documento: "))
     if choice == 1:
         bayes_classifiers.nb_init()

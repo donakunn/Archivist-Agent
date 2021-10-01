@@ -49,7 +49,7 @@ class NaiveBayesClassifier:
         lista_parole = []
         # porter = PorterStemmer()
         for parola in re.findall(r"[a-zA-Z]+", doc):
-            # if parola not in lista_parole:
+            # if parola not in STOPWORDS:       decresce drammaticamente l'accuracy in comp.os.ms-windows.misc
             lista_parole.append(parola)
         return lista_parole
 
@@ -80,8 +80,8 @@ class NaiveBayesClassifier:
                                     else:
                                         self.vocabolario[t] = 1
 
-        if is_training_set:
-            self.pulizia_vocabolario()
+        # if is_training_set:
+        self.pulizia_vocabolario()
         return corpus
 
     def pulizia_vocabolario(self):
