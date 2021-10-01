@@ -43,19 +43,15 @@ class NaiveBayesClassifier:
         print("\nRisultato totale della classificazione: {0:6.2f}% di risposte esatte".format(risultato))
         input("Premere un tasto per terminare...")
 
-    def porter_tokenizer(self, lista_parole):
-        porter = PorterStemmer()
-        return [porter.stem(parola) for parola in lista_parole]
-
     def analizza_testo(self, doc):
         """Tokenizza il testo contenuto in un documento e restituisce una lista che contiene i token estratti
             meno eventuali stopwords."""
         lista_parole = []
+        # porter = PorterStemmer()
         for parola in re.findall(r"[a-zA-Z]+", doc):
-            if parola not in STOPWORDS:
-                lista_parole.append(parola)
-
-        return self.porter_tokenizer(lista_parole)
+            # if parola not in lista_parole:
+            lista_parole.append(parola)
+        return lista_parole
 
     def costruisci_corpus(self, dir_path, is_training_set):  # nome non mi convince
         """Data una dir_path che contenga solo cartelle,
@@ -93,7 +89,7 @@ class NaiveBayesClassifier:
          per migliorare le prestazioni del sistema."""
         da_eliminare = []
         for p in self.vocabolario:
-            if self.vocabolario[p] >= 15000:
+            if self.vocabolario[p] >= 500:
                 da_eliminare.append(p)
         for p in da_eliminare:
             del self.vocabolario[p]

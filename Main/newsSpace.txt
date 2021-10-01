@@ -1,0 +1,21 @@
+from spacenews.com/starfish-space-raises-7-million-for-constellation-managing-space-tugs/
+Starfish Space raises $7 million for constellation-managing space tugs
+TAMPA, Fla. — Starfish Space has raised $7 million to develop space tugs that aim to extend the lives of satellites, move them to different orbits and remove debris.
+
+Early-stage investors NFX and MaC Venture Capital led the funding round, with participation from PSL Ventures, Boost VC, Liquid2 Ventures and Hypothesis.
+
+Venture capital firm Boost VC had led an earlier investment round for Starfish Space.
+
+The Kent, Washington-based startup said Sept. 28 it will use proceeds to accelerate the development of its all-electric Otter spacecraft, targeting an initial launch in 2023 or 2024.
+
+Otter aims to be cheaper and smaller than the servicing spacecraft that Northrop Grumman and Astroscale currently have in orbit, co-founder and former Blue Origin engineer Trevor Bennett previously told SpaceNews.
+
+As well as being designed to service spacecraft in multiple orbits, Starfish Space said Otter could later be integrated into autonomous robotics infrastructure, supporting manufacturing, assembling, mining and other upcoming capabilities in space.
+
+The venture is currently flight testing its Cephalopod rendezvous, proximity operations and docking (RPOD) software on thrusters that are part of startup Orbit Fab’s spacecraft refueling demo mission in low Earth orbit.
+
+Orbit Fab recently unveiled plans for an in-orbit refueling mission in late 2022 or early 2023 in geostationary orbit. 
+
+“As space becomes more and more commercialized, we see huge opportunities to solve Earth’s problems in space,” said Adrian Fenty, MaC Venture Capital’s managing general partner.
+
+“Additionally, as space becomes more crowded and more regulated, we see a massive need for companies like Starfish to provide satellite services and deorbiting.”
