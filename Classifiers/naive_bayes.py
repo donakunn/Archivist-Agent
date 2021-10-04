@@ -1,11 +1,10 @@
 import os
 import re
 import numpy as np
-from nltk.stem.porter import PorterStemmer
 from Classifiers.stopwords import STOPWORDS
 
+
 PATHSEP = os.path.sep
-# NOME_VOC = "vocabolario.txt"
 
 
 class NaiveBayesClassifier:
@@ -22,7 +21,7 @@ class NaiveBayesClassifier:
         np.save('prob_parole.npy', self.prob_parole)
 
     def load_classifier_attributes(self):
-        self.vocabolario = np.load('vocabolario.npy', allow_pickle= True).item()
+        self.vocabolario = np.load('vocabolario.npy', allow_pickle=True).item()
         self.prob_classi = np.load('prob_classi.npy', allow_pickle=True).item()
         self.prob_parole = np.load('prob_parole.npy', allow_pickle=True).item()
 
@@ -49,8 +48,8 @@ class NaiveBayesClassifier:
         lista_parole = []
         # porter = PorterStemmer()
         for parola in re.findall(r"[a-zA-Z]+", doc):
-            # if parola not in STOPWORDS:       decresce drammaticamente l'accuracy in comp.os.ms-windows.misc
-            lista_parole.append(parola)
+            if parola not in STOPWORDS:
+                lista_parole.append(parola)
         return lista_parole
 
     def costruisci_corpus(self, dir_path, is_training_set):  # nome non mi convince
@@ -80,8 +79,8 @@ class NaiveBayesClassifier:
                                     else:
                                         self.vocabolario[t] = 1
 
-        # if is_training_set:
-        self.pulizia_vocabolario()
+        if is_training_set:
+            self.pulizia_vocabolario()
         return corpus
 
     def pulizia_vocabolario(self):
@@ -89,7 +88,7 @@ class NaiveBayesClassifier:
          per migliorare le prestazioni del sistema."""
         da_eliminare = []
         for p in self.vocabolario:
-            if self.vocabolario[p] >= 500:
+            if self.vocabolario[p] <= 3:
                 da_eliminare.append(p)
         for p in da_eliminare:
             del self.vocabolario[p]
@@ -114,6 +113,10 @@ class NaiveBayesClassifier:
             n_documenti_totali += len(corpus[c])  # numero di doc di training set totali
             for testo in corpus[c]:
                 lista_parole.extend(corpus[c][testo])
+
+            # if len(lista_parole) > 200000:
+            #    random.shuffle(lista_parole)
+            #    lista_parole = lista_parole[:100000]
 
             # calcolo probabilità condizionata P(p|c) usando la correzione di laplace per evitare che il
             # prodotto venga annullato da parole non presenti nella classe
