@@ -8,9 +8,9 @@
 # Attribution-NonCommercial-ShareAlike 4.0 International License.
 # See: http://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 
-from searchProblem import Path
-from searchGeneric import Searcher
-from display import Displayable, visualize
+from Search.searchProblem import Path
+from Search.searchGeneric import Searcher
+from Search.display import visualize
 
 
 class DF_branch_and_bound(Searcher):
@@ -36,18 +36,18 @@ class DF_branch_and_bound(Searcher):
         while self.frontier:
             path = self.frontier.pop()
             if path.cost + self.problem.heuristic(path.end()) < self.bound:
-                # if path.end() not in path.initial_nodes():  # for cycle pruning
-                self.display(3, "Expanding:", path, "cost:", path.cost)
-                self.num_expanded += 1
-                if self.problem.is_goal(path.end()):
-                    self.best_path = path
-                    self.bound = path.cost
-                    self.display(2, "New best path:", path, " cost:", path.cost)
-                else:
-                    neighs = self.problem.neighbors(path.end())
-                    self.display(3, "Neighbors are", neighs)
-                    for arc in reversed(list(neighs)):
-                        self.add_to_frontier(Path(path, arc))
+                if path.end() not in path.initial_nodes():  # for cycle pruning tolto il commento da me
+                    self.display(3, "Expanding:", path, "cost:", path.cost)
+                    self.num_expanded += 1
+                    if self.problem.is_goal(path.end()):
+                        self.best_path = path
+                        self.bound = path.cost
+                        self.display(2, "New best path:", path, " cost:", path.cost)
+                    else:
+                        neighs = self.problem.neighbors(path.end())
+                        self.display(3, "Neighbors are", neighs)
+                        for arc in reversed(list(neighs)):
+                            self.add_to_frontier(Path(path, arc))
         self.display(1, "Number of paths expanded:", self.num_expanded,
                      "(optimal" if self.best_path else "(no", "solution found)")
         self.solution = self.best_path

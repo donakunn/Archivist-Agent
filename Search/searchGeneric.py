@@ -8,7 +8,10 @@
 # Attribution-NonCommercial-ShareAlike 4.0 International License.
 # See: http://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 
-from display import Displayable, visualize
+from Search.display import Displayable, visualize
+import heapq  # part of the Python standard library
+from Search.searchProblem import Path
+import Search.searchProblem as searchProblem
 
 
 class Searcher(Displayable):
@@ -58,10 +61,6 @@ class Searcher(Displayable):
                 self.display(3, "Frontier:", self.frontier)
         self.display(1, "No (more) solutions. Total of",
                      self.num_expanded, "paths expanded.")
-
-
-import heapq  # part of the Python standard library
-from searchProblem import Path
 
 
 class FrontierPQ(object):
@@ -131,10 +130,6 @@ class AStarSearcher(Searcher):
         """add path to the frontier with the appropriate cost"""
         value = path.cost + self.problem.heuristic(path.end())
         self.frontier.add(path, value)
-
-
-import searchProblem as searchProblem
-
 
 def test(SearchClass, problem=searchProblem.problem1, solutions=[['g', 'd', 'b', 'c', 'a']]):
     """Unit test for aipython searching algorithms.

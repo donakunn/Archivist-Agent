@@ -21,7 +21,8 @@ class Displayable(object):
         the other arguments are whatever arguments print can take.
         """
         if level <= self.max_display_level:
-            print(*args, **nargs)  ##if error you are using Python2 not Python3
+            print(*args, **nargs)  # if error you are using Python2 not Python3
+
 
 def visualize(func):
     """A decorator for algorithms that do interactive visualization.
