@@ -17,7 +17,7 @@ def start_menu():
             print("Il documento è stato classificato come ", classmax)
     else:
         path_searcher = Search.ArchivePathSearcher.ArchivePathSearcher()
-        path_searcher.goal_searcher_with_branch_and_bound()
+        print(path_searcher.goal_searcher_with_branch_and_bound('sci.med'))
 
 
 if __name__ == '__main__':

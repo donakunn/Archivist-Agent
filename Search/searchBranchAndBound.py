@@ -50,7 +50,6 @@ class DF_branch_and_bound(Searcher):
                             self.add_to_frontier(Path(path, arc))
         self.display(1, "Number of paths expanded:", self.num_expanded,
                      "(optimal" if self.best_path else "(no", "solution found)")
-        self.solution = self.best_path
         return self.best_path
 
 

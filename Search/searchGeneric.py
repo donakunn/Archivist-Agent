@@ -131,24 +131,6 @@ class AStarSearcher(Searcher):
         value = path.cost + self.problem.heuristic(path.end())
         self.frontier.add(path, value)
 
-def test(SearchClass, problem=searchProblem.problem1, solutions=[['g', 'd', 'b', 'c', 'a']]):
-    """Unit test for aipython searching algorithms.
-    SearchClass is a class that takes a problemm and implements search()
-    problem is a search problem
-    solutions is a list of optimal solutions
-    """
-    print("Testing problem 1:")
-    schr1 = SearchClass(problem)
-    path1 = schr1.search()
-    print("Path found:", path1)
-    assert path1 is not None, "No path is found in problem1"
-    assert list(path1.nodes()) in solutions, "Shortest path not found in problem1"
-    print("Passed unit test")
-
-
-if __name__ == "__main__":
-    # test(Searcher)
-    test(AStarSearcher)
 
 # example queries:
 # searcher1 = Searcher(searchProblem.acyclic_delivery_problem)   # DFS
