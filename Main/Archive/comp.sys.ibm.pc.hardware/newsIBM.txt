@@ -1,0 +1,10 @@
+from https://www.pcmag.com/news/the-golden-age-of-ibm-pcs
+The Golden Age of IBM PCs
+As the IBM PC turns 40, let's revisit innovative IBM machines from the first decade of the PC, 1981-1990
+IBM Personal Computer (1981)
+IBM intended its PC to compete with everything from the upper-end of the home market (where the Apple II ruled) to the small business PC realm. 
+To that end, it allowed maximum flexibility: its base model contained only 16K of RAM and no disk drives (users could run BASIC from ROM and save to a cassette tape drive). Maxed out, it could utilize a whopping 640K of RAM, two double-sided, double-density disk drives (360K storage each!), and color CGA graphics. 
+That configuration would cost you as much as a new car at the time. 
+Still, this flexible machine became the forefather of all x86 PCs today.
+IBM Personal Computer AT (1984)
+The IBM PC/AT (5170) represented the first architectural upgrade to the IBM PC platform, introducing Intel's new 80286 CPU, allowing for vastly more RAM, a new keyboard standard, a 1.2MB high-density floppy drive, larger hard disks, a ROM BIOS, and more. Like the PC and XT before it, it inspired a large industry of copycats that kept much less expensive AT compatible machines on the market for many years—even after IBM had stopped selling them.

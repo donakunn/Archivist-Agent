@@ -48,15 +48,5 @@ class DF_branch_and_bound(Searcher):
                         self.display(3, "Neighbors are", neighs)
                         for arc in reversed(list(neighs)):
                             self.add_to_frontier(Path(path, arc))
-        self.display(1, "Number of paths expanded:", self.num_expanded,
-                     "(optimal" if self.best_path else "(no", "solution found)")
         return self.best_path
 
-
-# from searchGeneric import test
-# Example queries:
-# import searchProblem
-# searcherb1 = DF_branch_and_bound(searchProblem.acyclic_delivery_problem)
-# print(searcherb1.search())        # find optimal path
-# searcherb2 = DF_branch_and_bound(searchProblem.cyclic_delivery_problem, bound=100)
-# print(searcherb2.search())        # find optimal path
