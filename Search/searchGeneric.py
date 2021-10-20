@@ -8,10 +8,9 @@
 # Attribution-NonCommercial-ShareAlike 4.0 International License.
 # See: http://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 
-from Search.display import Displayable, visualize
+from Main.display import Displayable, visualize
 import heapq  # part of the Python standard library
 from Search.searchProblem import Path
-import Search.searchProblem as searchProblem
 
 
 class Searcher(Displayable):

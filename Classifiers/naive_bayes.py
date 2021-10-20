@@ -3,7 +3,6 @@ import re
 import numpy as np
 from Classifiers.stopwords import STOPWORDS
 
-
 PATHSEP = os.path.sep
 
 
