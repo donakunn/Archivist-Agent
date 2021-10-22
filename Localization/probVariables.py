@@ -10,6 +10,7 @@
 
 import random
 
+
 class Variable(object):
     """A random variable.
     name (string) - name of the variable
@@ -23,14 +24,13 @@ class Variable(object):
         domain a list of printable values
         position of form (x,y) 
         """
-        self.name = name   # string
-        self.domain = domain # list of values
+        self.name = name  # string
+        self.domain = domain  # list of values
         self.position = position if position else (random.random(), random.random())
-        self.size = len(domain) 
+        self.size = len(domain)
 
     def __str__(self):
         return self.name
-    
+
     def __repr__(self):
         return self.name  # f"Variable({self.name})"
-
