@@ -10,7 +10,7 @@
 
 from Search.searchProblem import Path
 from Search.searchGeneric import Searcher
-from Main.display import visualize
+from display import visualize
 
 
 class DF_branch_and_bound(Searcher):

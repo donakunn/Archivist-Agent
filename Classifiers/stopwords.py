@@ -1,6 +1,3 @@
-"""Array di stringhe che contiene le più comuni stopwords della lingua inglese """
-
-
 STOPWORDS = ["a", "about", "above", "above", "across", "after", "afterwards",
              "again", "against", "all", "almost", "alone", "along", "already",
              "also","although","always","am","among", "amongst", "amoungst",

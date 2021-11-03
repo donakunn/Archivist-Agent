@@ -2,6 +2,7 @@ import random
 from Search.searchBranchAndBound import DF_branch_and_bound
 from Search.searchProblem import Search_problem_from_explicit_graph, Arc
 from shutil import copyfile
+from Localization.locWithHMM import Localizator
 import os
 
 
@@ -65,8 +66,10 @@ class ArchivePathSearcher:
              Arc('C11', 'rec.sport.baseball', 10), Arc('rec.sport.baseball', 'C11', 10),
              Arc('C11', 'rec.motorcycles', 11), Arc('C4', 'rec.motorcycles', 11)]
         )
+        self.localizator = Localizator()
 
     def heuristic_builder(self, target_position):
+        self.localizator.build_archive_HMM()
         already_discovered = [target_position]
         if self.cyclic_delivery_problem.hmap:
             self.cyclic_delivery_problem.hmap.clear()
@@ -91,17 +94,13 @@ class ArchivePathSearcher:
     def path_searcher_with_df_branch_and_bound(self, target_position):
         self.heuristic_builder(target_position)
         self.cyclic_delivery_problem.start = self.current_position
-        bound = 90          # 90 stima lunghezza massima percorso
+        bound = 90
         path_searcher = DF_branch_and_bound(self.cyclic_delivery_problem, bound)
         found_path = path_searcher.search()
-        if found_path is not None:
-            self.current_position = target_position
         return found_path
 
-    def print_current_position(self):
-        print('Agente in posizione: ', self.current_position)
-
     def go_back_to_resting_point(self):
+        input('Premere invio per tornare al resting point piu vicino')
         print('Cerco resting point più vicino...')
         closes_resting_point_node = ''
         closes_resting_point_distance = 100
@@ -112,21 +111,21 @@ class ArchivePathSearcher:
                 closes_resting_point_node = resting_node
                 closes_resting_point_distance = self.cyclic_delivery_problem.hmap[self.current_position]
         print('il resting point più vicino è: ', closes_resting_point_node)
-        print('Calcolo del percorso verso il resting point in corso..')
         path_found = self.path_searcher_with_df_branch_and_bound(closes_resting_point_node)
+        print('Percorso calcolato dall agente:')
+        print(path_found)
         if path_found is not None:
-            print(path_found)
-            self.print_current_position()
+            self.simulate_movement_and_localize_agent_on_path(path_found)
+            self.current_position = closes_resting_point_node
         else:
             print('nessun percorso disponibile')
 
     def archive_document(self, category, file_name):
-        self.print_current_position()
-        print('Calcolo del percorso in corso..')
         path_found = self.path_searcher_with_df_branch_and_bound(category)
+        print('Percorso calcolato dall agente:')
+        print(path_found)
         if path_found is not None:
-            print(path_found)
-            self.print_current_position()
+            self.simulate_movement_and_localize_agent_on_path(path_found)
             try:
                 destination = './Archive/' + category
                 if not os.path.exists(destination):
@@ -139,7 +138,28 @@ class ArchivePathSearcher:
                 print('documento archiviato correttamente.')
                 self.go_back_to_resting_point()
 
-
-
-
-
+    def simulate_movement_and_localize_agent_on_path(self, path_found):
+        path_to_follow = list(path_found.nodes())
+        list.reverse(path_to_follow)
+        calculated_pos = self.current_position
+        for node in path_to_follow:
+            more_likely_found = None
+            input('Premi invio per avanzare di un epoca')
+            histogram = {k: v for k, v in sorted(self.localizator.observe(node).items(), key=lambda x: x[1],
+                                                 reverse=True)}
+            for state in histogram:
+                if state == calculated_pos:
+                    more_likely_found = calculated_pos
+                    break
+                else:
+                    neighbors = self.cyclic_delivery_problem.neighs[calculated_pos]
+                    for neighbor in neighbors:
+                        if neighbor.get_to_node() == state:
+                            calculated_pos = state
+                            more_likely_found = calculated_pos
+                            break
+                    if more_likely_found is not None:
+                        break
+            print('Agente in posizione: ' + more_likely_found +
+                  ' con probabilità del {:5.2f}%'.format(histogram[more_likely_found] * 100))
+        self.current_position = path_to_follow[-1]

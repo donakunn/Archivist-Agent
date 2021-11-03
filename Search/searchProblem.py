@@ -52,6 +52,9 @@ class Arc(object):
         else:
             return str(self.from_node) + " --> " + str(self.to_node)
 
+    def get_to_node(self):
+        return self.to_node
+
 
 class Search_problem_from_explicit_graph(Search_problem):
     """A search problem consists of:
@@ -152,4 +155,3 @@ class Path(object):
                     + "--> " + str(self.arc.to_node))
         else:
             return str(self.initial) + " --> " + str(self.arc.to_node)
-

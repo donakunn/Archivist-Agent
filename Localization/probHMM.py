@@ -8,9 +8,9 @@
 # Attribution-NonCommercial-ShareAlike 4.0 International License.
 # See: http://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 
-from Main.display import Displayable
+from display import Displayable
 from Localization.probStochSim import sample_one
-from probStochSim import resample
+from Localization.probStochSim import resample
 
 
 class HMM(object):
@@ -74,6 +74,7 @@ class HMMparticleFilter(Displayable):
         self.particles = [sample_one(hmm.indist)
                           for _ in range(number_particles)]
         self.weights = [1 for _ in range(number_particles)]
+        self.first_time = True
 
     def filter(self, obsseq):
         """returns the state distribution following the sequence of
@@ -84,12 +85,11 @@ class HMMparticleFilter(Displayable):
         If that is not what is wanted initially, do an observe first.
         """
         for obs in obsseq:
-            self.advance()  # advance time
+            if not self.first_time:
+                self.advance()  # advance time
             self.observe(obs)  # observe
             self.resample_particles()
-            self.display(2, "After observing", str(obs),
-                         "state distribution:", self.histogram())
-        self.display(1, "Final state distribution:", self.histogram())
+        self.first_time = False
         return self.histogram()
 
     def advance(self):
@@ -103,8 +103,9 @@ class HMMparticleFilter(Displayable):
         for i in range(len(self.particles)):
             for obv in obs:
                 if obs[obv]:
-                    self.weights[i] *= self.hmm.pobs[obv][self.particles[i]]
-                else:
+                    if self.particles[i] in self.hmm.pobs[obv]:
+                        self.weights[i] *= self.hmm.pobs[obv][self.particles[i]]
+                elif self.particles[i] in self.hmm.pobs[obv]:
                     self.weights[i] *= 1 - self.hmm.pobs[obv][self.particles[i]]
 
     def histogram(self):

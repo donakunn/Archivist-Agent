@@ -8,7 +8,7 @@
 # Attribution-NonCommercial-ShareAlike 4.0 International License.
 # See: http://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 
-from Main.display import Displayable, visualize
+from display import Displayable, visualize
 import heapq  # part of the Python standard library
 from Search.searchProblem import Path
 
@@ -130,15 +130,3 @@ class AStarSearcher(Searcher):
         value = path.cost + self.problem.heuristic(path.end())
         self.frontier.add(path, value)
 
-
-# example queries:
-# searcher1 = Searcher(searchProblem.acyclic_delivery_problem)   # DFS
-# searcher1.search()  # find first path
-# searcher1.search()  # find next path
-# searcher2 = AStarSearcher(searchProblem.acyclic_delivery_problem)   # A*
-# searcher2.search()  # find first path
-# searcher2.search()  # find next path
-# searcher3 = Searcher(searchProblem.cyclic_delivery_problem)   # DFS
-# searcher3.search()  # find first path with DFS. What do you expect to happen?
-# searcher4 = AStarSearcher(searchProblem.cyclic_delivery_problem)    # A*
-# searcher4.search()  # find first path
