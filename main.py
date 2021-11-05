@@ -32,9 +32,6 @@ def start_menu():
             elif choice == 0:
                 break
         except Exception:
-            if choice == 2:
-                print('Classificatore non addestrato, Impossibile classificare documento')
-            else:
                 print('Scelta non valida')
 
 
